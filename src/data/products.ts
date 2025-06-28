@@ -1,0 +1,113 @@
+import { Product } from '../types';
+
+export const products: Product[] = [
+  {
+    id: '1',
+    title: 'Venetian Reflections',
+    artist: 'Elena Marchetti',
+    price: 450,
+    originalPrice: 520,
+    image: 'https://images.pexels.com/photos/1824353/pexels-photo-1824353.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'etching',
+    size: '15" × 12"',
+    year: 2023,
+    description: 'A stunning etching capturing the interplay of light and shadow on Venetian canals. Created using traditional copper plate techniques with acid mordant.',
+    edition: '25/100',
+    inStock: true,
+    featured: true
+  },
+  {
+    id: '2',
+    title: 'Forest Whispers',
+    artist: 'Marcus Chen',
+    price: 680,
+    image: 'https://images.pexels.com/photos/1267697/pexels-photo-1267697.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'mezzotint',
+    size: '18" × 14"',
+    year: 2023,
+    description: 'An intricate mezzotint showcasing the delicate textures of an ancient forest. The rich blacks and subtle grays create extraordinary depth.',
+    edition: '12/50',
+    inStock: true,
+    featured: true
+  },
+  {
+    id: '3',
+    title: 'Urban Symphony',
+    artist: 'Sarah Rodriguez',
+    price: 320,
+    image: 'https://images.pexels.com/photos/1153213/pexels-photo-1153213.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'aquatint',
+    size: '12" × 16"',
+    year: 2022,
+    description: 'A dynamic aquatint depicting the rhythm of city life. Layered acid washes create beautiful tonal variations.',
+    edition: '45/75',
+    inStock: true
+  },
+  {
+    id: '4',
+    title: 'Botanical Study III',
+    artist: 'Elena Marchetti',
+    price: 380,
+    image: 'https://images.pexels.com/photos/1145720/pexels-photo-1145720.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'engraving',
+    size: '10" × 14"',
+    year: 2023,
+    description: 'Precise line engraving showcasing the intricate details of botanical forms. Each line carefully carved by hand.',
+    edition: '18/60',
+    inStock: true
+  },
+  {
+    id: '5',
+    title: 'Nocturne in Blue',
+    artist: 'Marcus Chen',
+    price: 520,
+    image: 'https://images.pexels.com/photos/1762851/pexels-photo-1762851.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'etching',
+    size: '16" × 12"',
+    year: 2023,
+    description: 'A haunting etching exploring the mysteries of twilight. Multiple plate techniques create rich atmospheric effects.',
+    edition: '8/40',
+    inStock: true,
+    featured: true
+  },
+  {
+    id: '6',
+    title: 'Architectural Forms',
+    artist: 'Sarah Rodriguez',
+    price: 420,
+    image: 'https://images.pexels.com/photos/1834401/pexels-photo-1834401.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'engraving',
+    size: '14" × 18"',
+    year: 2022,
+    description: 'Clean geometric forms explored through classical engraving techniques. The interplay of positive and negative space.',
+    edition: '22/80',
+    inStock: false
+  },
+  {
+    id: '7',
+    title: 'Seascape Meditation',
+    artist: 'Elena Marchetti',
+    price: 290,
+    image: 'https://images.pexels.com/photos/814499/pexels-photo-814499.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'aquatint',
+    size: '12" × 10"',
+    year: 2023,
+    description: 'Tranquil aquatint capturing the essence of coastal tranquility. Soft gradations evoke the movement of water.',
+    edition: '35/90',
+    inStock: true
+  },
+  {
+    id: '8',
+    title: 'Portrait in Shadow',
+    artist: 'Marcus Chen',
+    price: 750,
+    image: 'https://images.pexels.com/photos/1269968/pexels-photo-1269968.jpeg?auto=compress&cs=tinysrgb&w=800',
+    category: 'mezzotint',
+    size: '16" × 20"',
+    year: 2023,
+    description: 'Masterful mezzotint portrait demonstrating the full range of tonal possibilities. Hours of meticulous rocking create the velvety blacks.',
+    edition: '5/25',
+    inStock: true,
+    featured: true
+  }
+];
