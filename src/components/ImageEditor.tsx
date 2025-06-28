@@ -5,7 +5,9 @@ interface ImageEditorProps {
   product: Product;
   onSave: (updatedProduct: Product) => void;
   onCancel: () => void;
+  onResetToOriginal?: () => void;
   isOpen: boolean;
+  isOriginalProduct?: boolean;
 }
 
 interface ImageFilter {
@@ -15,7 +17,7 @@ interface ImageFilter {
   blur: number;
 }
 
-export function ImageEditor({ product, onSave, onCancel, isOpen }: ImageEditorProps) {
+export function ImageEditor({ product, onSave, onCancel, onResetToOriginal, isOpen, isOriginalProduct }: ImageEditorProps) {
   const [editedProduct, setEditedProduct] = useState<Product>(product);
   const [imageFilters, setImageFilters] = useState<ImageFilter>({
     brightness: 100,
@@ -130,6 +132,14 @@ export function ImageEditor({ product, onSave, onCancel, isOpen }: ImageEditorPr
           <div className="flex justify-between items-center">
             <h2 className="text-2xl font-bold text-gray-900">Edit Print</h2>
             <div className="flex space-x-2">
+              {isOriginalProduct && onResetToOriginal && (
+                <button
+                  onClick={onResetToOriginal}
+                  className="px-4 py-2 text-red-600 hover:text-red-800 transition-colors"
+                >
+                  Reset to Original
+                </button>
+              )}
               <button
                 onClick={onCancel}
                 className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"

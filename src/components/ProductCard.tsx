@@ -8,9 +8,10 @@ interface ProductCardProps {
   onViewDetails: (product: Product) => void;
   onEdit?: (product: Product) => void;
   isUploaded?: boolean;
+  isEdited?: boolean;
 }
 
-export function ProductCard({ product, onViewDetails, onEdit, isUploaded = false }: ProductCardProps) {
+export function ProductCard({ product, onViewDetails, onEdit, isUploaded = false, isEdited = false }: ProductCardProps) {
   const { addToCart } = useCart();
 
   return (
@@ -31,6 +32,11 @@ export function ProductCard({ product, onViewDetails, onEdit, isUploaded = false
             UPLOADED
           </div>
         )}
+        {isEdited && !isUploaded && (
+          <div className="absolute top-4 right-4 bg-green-500 text-white px-2 py-1 text-xs font-semibold rounded">
+            EDITED
+          </div>
+        )}
         {!product.inStock && (
           <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center">
             <span className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold">
@@ -46,10 +52,11 @@ export function ProductCard({ product, onViewDetails, onEdit, isUploaded = false
             >
               <Eye className="w-5 h-5" />
             </button>
-            {isUploaded && onEdit && (
+            {onEdit && (
               <button
                 onClick={() => onEdit(product)}
                 className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors shadow-lg"
+                title={isUploaded ? "Edit uploaded print" : "Edit print"}
               >
                 <Edit className="w-5 h-5" />
               </button>

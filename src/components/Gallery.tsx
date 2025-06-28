@@ -4,7 +4,6 @@ import { ProductModal } from './ProductModal';
 import { ImageUpload } from './ImageUpload';
 import { ImageEditor } from './ImageEditor';
 import { Product } from '../types';
-import { products } from '../data/products';
 import { useImageContext } from '../context/ImageContext';
 
 interface GalleryProps {
@@ -18,14 +17,16 @@ export function Gallery({ searchQuery }: GalleryProps) {
   const [showUpload, setShowUpload] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   
-  const { uploadedProducts, addUploadedProduct, updateUploadedProduct } = useImageContext();
+  const { 
+    allProducts, 
+    addUploadedProduct, 
+    updateProduct, 
+    isUploadedProduct,
+    isEditedProduct,
+    resetToOriginal
+  } = useImageContext();
 
   const categories = ['all', 'etching', 'engraving', 'mezzotint', 'aquatint'];
-
-  // Combine original products with uploaded products
-  const allProducts = useMemo(() => {
-    return [...products, ...uploadedProducts];
-  }, [uploadedProducts]);
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = allProducts.filter(product => {
@@ -72,7 +73,7 @@ export function Gallery({ searchQuery }: GalleryProps) {
 
   const handleSaveEdit = (updatedProduct: Product) => {
     if (editingProduct) {
-      updateUploadedProduct(editingProduct.id, updatedProduct);
+      updateProduct(editingProduct.id, updatedProduct);
       setEditingProduct(null);
     }
   };
@@ -81,8 +82,15 @@ export function Gallery({ searchQuery }: GalleryProps) {
     setEditingProduct(null);
   };
 
-  const isUploadedProduct = (product: Product) => {
-    return uploadedProducts.some(p => p.id === product.id);
+  const handleResetToOriginal = () => {
+    if (editingProduct) {
+      resetToOriginal(editingProduct.id);
+      setEditingProduct(null);
+    }
+  };
+
+  const isOriginalProduct = (productId: string) => {
+    return !isUploadedProduct(productId) && !isEditedProduct(productId);
   };
 
   return (
@@ -165,7 +173,8 @@ export function Gallery({ searchQuery }: GalleryProps) {
                 product={product}
                 onViewDetails={setSelectedProduct}
                 onEdit={handleEditProduct}
-                isUploaded={isUploadedProduct(product)}
+                isUploaded={isUploadedProduct(product.id)}
+                isEdited={isEditedProduct(product.id)}
               />
             ))}
           </div>
@@ -196,7 +205,9 @@ export function Gallery({ searchQuery }: GalleryProps) {
             product={editingProduct}
             onSave={handleSaveEdit}
             onCancel={handleCancelEdit}
+            onResetToOriginal={handleResetToOriginal}
             isOpen={!!editingProduct}
+            isOriginalProduct={isOriginalProduct(editingProduct.id)}
           />
         )}
       </div>
