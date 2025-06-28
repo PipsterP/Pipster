@@ -5,6 +5,7 @@ interface ImageContextType {
   uploadedProducts: Product[];
   addUploadedProduct: (product: Product) => void;
   removeUploadedProduct: (productId: string) => void;
+  updateUploadedProduct: (productId: string, updatedProduct: Product) => void;
   getAllProducts: () => Product[];
 }
 
@@ -55,6 +56,14 @@ export function ImageProvider({ children }: ImageProviderProps) {
     setUploadedProducts(prev => prev.filter(product => product.id !== productId));
   };
 
+  const updateUploadedProduct = (productId: string, updatedProduct: Product) => {
+    setUploadedProducts(prev => 
+      prev.map(product => 
+        product.id === productId ? updatedProduct : product
+      )
+    );
+  };
+
   const getAllProducts = () => {
     return uploadedProducts;
   };
@@ -63,6 +72,7 @@ export function ImageProvider({ children }: ImageProviderProps) {
     uploadedProducts,
     addUploadedProduct,
     removeUploadedProduct,
+    updateUploadedProduct,
     getAllProducts
   };
 

@@ -1,14 +1,16 @@
 import React from 'react';
-import { ShoppingCart, Eye } from 'lucide-react';
+import { ShoppingCart, Eye, Edit } from 'lucide-react';
 import { Product } from '../types';
 import { useCart } from '../context/CartContext';
 
 interface ProductCardProps {
   product: Product;
   onViewDetails: (product: Product) => void;
+  onEdit?: (product: Product) => void;
+  isUploaded?: boolean;
 }
 
-export function ProductCard({ product, onViewDetails }: ProductCardProps) {
+export function ProductCard({ product, onViewDetails, onEdit, isUploaded = false }: ProductCardProps) {
   const { addToCart } = useCart();
 
   return (
@@ -22,6 +24,11 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         {product.originalPrice && (
           <div className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 text-xs font-semibold rounded">
             SALE
+          </div>
+        )}
+        {isUploaded && (
+          <div className="absolute top-4 right-4 bg-blue-500 text-white px-2 py-1 text-xs font-semibold rounded">
+            UPLOADED
           </div>
         )}
         {!product.inStock && (
@@ -39,6 +46,14 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
             >
               <Eye className="w-5 h-5" />
             </button>
+            {isUploaded && onEdit && (
+              <button
+                onClick={() => onEdit(product)}
+                className="bg-green-600 text-white p-2 rounded-full hover:bg-green-700 transition-colors shadow-lg"
+              >
+                <Edit className="w-5 h-5" />
+              </button>
+            )}
             {product.inStock && (
               <button
                 onClick={() => addToCart(product)}

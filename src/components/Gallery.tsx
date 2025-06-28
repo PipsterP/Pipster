@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { ProductCard } from './ProductCard';
 import { ProductModal } from './ProductModal';
 import { ImageUpload } from './ImageUpload';
+import { ImageEditor } from './ImageEditor';
 import { Product } from '../types';
 import { products } from '../data/products';
 import { useImageContext } from '../context/ImageContext';
@@ -15,8 +16,9 @@ export function Gallery({ searchQuery }: GalleryProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('featured');
   const [showUpload, setShowUpload] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   
-  const { uploadedProducts, addUploadedProduct } = useImageContext();
+  const { uploadedProducts, addUploadedProduct, updateUploadedProduct } = useImageContext();
 
   const categories = ['all', 'etching', 'engraving', 'mezzotint', 'aquatint'];
 
@@ -62,6 +64,25 @@ export function Gallery({ searchQuery }: GalleryProps) {
   const handleImageUpload = (product: Product) => {
     addUploadedProduct(product);
     setShowUpload(false);
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+  };
+
+  const handleSaveEdit = (updatedProduct: Product) => {
+    if (editingProduct) {
+      updateUploadedProduct(editingProduct.id, updatedProduct);
+      setEditingProduct(null);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingProduct(null);
+  };
+
+  const isUploadedProduct = (product: Product) => {
+    return uploadedProducts.some(p => p.id === product.id);
   };
 
   return (
@@ -143,6 +164,8 @@ export function Gallery({ searchQuery }: GalleryProps) {
                 key={product.id}
                 product={product}
                 onViewDetails={setSelectedProduct}
+                onEdit={handleEditProduct}
+                isUploaded={isUploadedProduct(product)}
               />
             ))}
           </div>
@@ -166,6 +189,16 @@ export function Gallery({ searchQuery }: GalleryProps) {
           isOpen={!!selectedProduct}
           onClose={() => setSelectedProduct(null)}
         />
+
+        {/* Image Editor Modal */}
+        {editingProduct && (
+          <ImageEditor
+            product={editingProduct}
+            onSave={handleSaveEdit}
+            onCancel={handleCancelEdit}
+            isOpen={!!editingProduct}
+          />
+        )}
       </div>
     </section>
   );
