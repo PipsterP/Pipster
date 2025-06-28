@@ -22,16 +22,29 @@ export function ImageProvider({ children }: ImageProviderProps) {
     const saved = localStorage.getItem('uploadedProducts');
     if (saved) {
       try {
-        setUploadedProducts(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        // Validate that it's an array of products
+        if (Array.isArray(parsed)) {
+          setUploadedProducts(parsed);
+        } else {
+          console.warn('Invalid data format in localStorage, clearing...');
+          localStorage.removeItem('uploadedProducts');
+        }
       } catch (error) {
         console.error('Error loading uploaded products:', error);
+        // Clear corrupted data
+        localStorage.removeItem('uploadedProducts');
       }
     }
   }, []);
 
   // Save uploaded products to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('uploadedProducts', JSON.stringify(uploadedProducts));
+    try {
+      localStorage.setItem('uploadedProducts', JSON.stringify(uploadedProducts));
+    } catch (error) {
+      console.error('Error saving uploaded products to localStorage:', error);
+    }
   }, [uploadedProducts]);
 
   const addUploadedProduct = (product: Product) => {

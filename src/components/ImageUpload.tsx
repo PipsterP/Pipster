@@ -64,41 +64,54 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
 
     setIsUploading(true);
 
-    // Create a new product with uploaded image
-    const newProduct: Product = {
-      id: Date.now().toString(), // Simple ID generation
-      title: productData.title || 'Untitled',
-      artist: productData.artist || 'Unknown Artist',
-      price: parseFloat(productData.price) || 0,
-      image: uploadedImage,
-      category: productData.category,
-      size: productData.size || 'Unknown',
-      year: parseInt(productData.year) || new Date().getFullYear(),
-      description: productData.description || 'No description available.',
-      edition: productData.edition,
-      inStock: true
-    };
+    try {
+      // Validate required fields
+      if (!productData.title.trim() || !productData.artist.trim() || !productData.price) {
+        alert('Please fill in all required fields (Title, Artist, and Price)');
+        setIsUploading(false);
+        return;
+      }
 
-    // Add to gallery
-    onImageUpload(newProduct);
+      // Create a new product with uploaded image
+      const newProduct: Product = {
+        id: Date.now().toString(), // Simple ID generation
+        title: productData.title.trim(),
+        artist: productData.artist.trim(),
+        price: parseFloat(productData.price) || 0,
+        image: uploadedImage,
+        category: productData.category,
+        size: productData.size.trim() || 'Unknown',
+        year: parseInt(productData.year) || new Date().getFullYear(),
+        description: productData.description.trim() || 'No description available.',
+        edition: productData.edition.trim() || '1/1',
+        inStock: true
+      };
 
-    // Reset form
-    setUploadedImage(null);
-    setProductData({
-      title: '',
-      artist: '',
-      price: '',
-      category: 'etching',
-      size: '',
-      year: new Date().getFullYear().toString(),
-      description: '',
-      edition: '1/1'
-    });
-    setIsUploading(false);
+      // Add to gallery
+      onImageUpload(newProduct);
 
-    // Clear file input
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      // Reset form
+      setUploadedImage(null);
+      setProductData({
+        title: '',
+        artist: '',
+        price: '',
+        category: 'etching',
+        size: '',
+        year: new Date().getFullYear().toString(),
+        description: '',
+        edition: '1/1'
+      });
+
+      // Clear file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('An error occurred while uploading. Please try again.');
+    } finally {
+      setIsUploading(false);
     }
   }, [uploadedImage, productData, onImageUpload]);
 
@@ -261,7 +274,7 @@ export function ImageUpload({ onImageUpload }: ImageUploadProps) {
               value={productData.size}
               onChange={handleInputChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              placeholder="e.g., 15\" × 12\""
+              placeholder='e.g., 15" x 12"'
             />
           </div>
 

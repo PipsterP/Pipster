@@ -151,7 +151,6 @@ export function Gallery({ searchQuery }: GalleryProps) {
             <p className="text-xl text-gray-600 mb-4">No prints found matching your criteria.</p>
             <button
               onClick={() => {
-                setSearchQuery('');
                 setSelectedCategory('all');
               }}
               className="text-amber-600 hover:text-amber-700 font-medium"
