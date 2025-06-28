@@ -7,6 +7,7 @@ import { About } from './components/About';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 import { CartProvider } from './context/CartContext';
+import { ImageProvider } from './context/ImageContext';
 
 function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -14,22 +15,24 @@ function App() {
 
   return (
     <CartProvider>
-      <div className="min-h-screen bg-white">
-        <Header 
-          onCartClick={() => setIsCartOpen(true)}
-          onSearchChange={setSearchQuery}
-          searchQuery={searchQuery}
-        />
-        <Hero />
-        <Gallery searchQuery={searchQuery} />
-        <About />
-        <Contact />
-        <Footer />
-        <Cart 
-          isOpen={isCartOpen} 
-          onClose={() => setIsCartOpen(false)} 
-        />
-      </div>
+      <ImageProvider>
+        <div className="min-h-screen bg-white">
+          <Header 
+            onCartClick={() => setIsCartOpen(true)}
+            onSearchChange={setSearchQuery}
+            searchQuery={searchQuery}
+          />
+          <Hero />
+          <Gallery searchQuery={searchQuery} />
+          <About />
+          <Contact />
+          <Footer />
+          <Cart 
+            isOpen={isCartOpen} 
+            onClose={() => setIsCartOpen(false)} 
+          />
+        </div>
+      </ImageProvider>
     </CartProvider>
   );
 }

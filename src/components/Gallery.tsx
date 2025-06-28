@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { ProductCard } from './ProductCard';
 import { ProductModal } from './ProductModal';
+import { ImageUpload } from './ImageUpload';
 import { Product } from '../types';
 import { products } from '../data/products';
+import { useImageContext } from '../context/ImageContext';
 
 interface GalleryProps {
   searchQuery: string;
@@ -12,11 +14,19 @@ export function Gallery({ searchQuery }: GalleryProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('featured');
+  const [showUpload, setShowUpload] = useState(false);
+  
+  const { uploadedProducts, addUploadedProduct } = useImageContext();
 
   const categories = ['all', 'etching', 'engraving', 'mezzotint', 'aquatint'];
 
+  // Combine original products with uploaded products
+  const allProducts = useMemo(() => {
+    return [...products, ...uploadedProducts];
+  }, [uploadedProducts]);
+
   const filteredAndSortedProducts = useMemo(() => {
-    let filtered = products.filter(product => {
+    let filtered = allProducts.filter(product => {
       const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            product.artist.toLowerCase().includes(searchQuery.toLowerCase()) ||
                            product.category.toLowerCase().includes(searchQuery.toLowerCase());
@@ -47,7 +57,12 @@ export function Gallery({ searchQuery }: GalleryProps) {
     }
 
     return filtered;
-  }, [searchQuery, selectedCategory, sortBy]);
+  }, [searchQuery, selectedCategory, sortBy, allProducts]);
+
+  const handleImageUpload = (product: Product) => {
+    addUploadedProduct(product);
+    setShowUpload(false);
+  };
 
   return (
     <section id="gallery" className="py-20 bg-gray-50">
@@ -58,6 +73,21 @@ export function Gallery({ searchQuery }: GalleryProps) {
             Explore our curated selection of intaglio prints, each piece representing hours of meticulous craftsmanship and artistic vision.
           </p>
         </div>
+
+        {/* Upload Button */}
+        <div className="flex justify-center mb-8">
+          <button
+            onClick={() => setShowUpload(!showUpload)}
+            className="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-medium"
+          >
+            {showUpload ? 'Hide Upload Form' : 'Upload New Print'}
+          </button>
+        </div>
+
+        {/* Upload Form */}
+        {showUpload && (
+          <ImageUpload onImageUpload={handleImageUpload} />
+        )}
 
         {/* Filters */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
@@ -99,7 +129,7 @@ export function Gallery({ searchQuery }: GalleryProps) {
         {/* Results count */}
         <div className="mb-6">
           <p className="text-gray-600">
-            Showing {filteredAndSortedProducts.length} of {products.length} prints
+            Showing {filteredAndSortedProducts.length} of {allProducts.length} prints
             {searchQuery && ` for "${searchQuery}"`}
             {selectedCategory !== 'all' && ` in ${selectedCategory}`}
           </p>
